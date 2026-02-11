@@ -2,10 +2,13 @@ import express from "express";
 import path from "path";
 import { ENV } from "../config/env.js";
 import { connectDB } from "../config/db.js";
+import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
 const PORT = ENV.PORT;
 const __dirname = path.resolve();
+
+app.use(clerkMiddleware());
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "OK" });

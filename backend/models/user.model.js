@@ -1,0 +1,102 @@
+import mongoose from "mongoose";
+
+const addressSchema = new mongoose.Schema({
+  label: { type: String, required: true },
+  fullName: { type: String, required: true },
+  streetAddress: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  zipCode: { type: Number, required: true },
+  phoneNumber: { type: String, required: true },
+  isDefault: { type: Boolean, required: true, default: false },
+});
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      minlength: [6, "Password must be at least 6 characters long"],
+    },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
+    clerkId: {
+      type: String,
+      required: [true, "Clerk ID is required"],
+      unique: true,
+    },
+    addresses: [addressSchema],
+    whishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    // cartItems: [
+    //   {
+    //     quantity: {
+    //       type: Number,
+    //       default: 1,
+    //     },
+    //     product: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "Product",
+    //     },
+    //     size: {
+    //       type: String,
+    //       default: "M",
+    //     },
+    //     color: {
+    //       type: String,
+    //       default: "Black",
+    //     },
+    //   },
+    // ],
+    // role: {
+    //   type: String,
+    //   enum: ["customer", "admin"],
+    //   default: "customer",
+    // },
+    // avatar: {
+    //   type: String,
+    //   default: "",
+    // },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+// Pre-save hook to hash password if modified (placeholder, user might add logic later)
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  try {
+    // const salt = await bcrypt.genSalt(10);
+    // this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.methods.comparePassword = async function (password) {
+  // return bcrypt.compare(password, this.password);
+  return false; // Placeholder
+};
+
+const User = mongoose.model("User", userSchema);
+
+export default User;

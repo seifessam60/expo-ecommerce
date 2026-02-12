@@ -7,7 +7,7 @@ import {
 } from "@clerk/clerk-react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+// import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -27,7 +27,7 @@ function App() {
         <div style={{ marginBottom: "20px" }}>
           <header>
             <SignedOut>
-              <SignInButton />
+              <SignInButton mode="modal" />
             </SignedOut>
             <SignedIn>
               <UserButton />
